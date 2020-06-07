@@ -11,3 +11,9 @@ class Item:
         self.name = name
         self.requirements = requirements
         self.type_of_item = type_of_item
+
+    def __repr__(self):
+        return self.name
+
+    def __str__(self):
+        return self.name

@@ -1,15 +1,19 @@
-from didierRPG.Hero import *
+from didierRPG.Hero import Hero
+from didierRPG.Item import Item
 
-print("Hello World")
 hero = Hero("Jozko")
-
-print(hero)
-print(hero.name)
-print(hero.strength)
-
 hero.save_state()
 
-hero2 = Hero(None).load_state("Jozko")
-print(hero2.name)
-print(hero2.strength)
+print(hero)
+print(hero.skills)
+print(hero.equipment)
+
+hero.load_state("Jozko")
+
+sword = Item("testSword", dict(), "hand")
+
+hero.equip(sword)
+
+print(hero.equipped())
+hero.save_state()
 

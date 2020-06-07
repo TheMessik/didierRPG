@@ -1,32 +1,37 @@
 import json
+from didierRPG.Item import Item
 
 
 class Hero:
     name = ""
     # skills of our hero
     # all skills are initially 0
-    constitution = 0
-    strength = 0
-    agility = 0
-    intelligence = 0
+    skills = {
+        "constitution": 0,
+        "strength": 0,
+        "agility": 0,
+        "intelligence": 0
+    }
 
     # inventory stuff
     # hero has initially no gear
-    helmet = ""
-    chest_plate = ""
-    pants = ""
-    left_hand = ""
-    right_hand = ""
-    spell = ""
+    # can equip items using equip(Item)
+    equipment = {
+        "helmet": None,
+        "chestplate": None,
+        "pants": None,
+        "hand": None,
+        "spell": None
+    }
 
     inventory = []
-
 
     # starting level
     level = 1
 
     def __init__(self, name):
         self.name = name
+
 
     # jobs to increase hero's level and abilities
     # TODO: balance
@@ -74,7 +79,15 @@ class Hero:
         """ challenge other hero, with a wager"""
         assert isinstance(other, Hero), "You either fight a hero, or you don't fight at all"
 
-    # inventory
+    # inventory methods
+    def equip(self, item):
+        self.equipment[item.type_of_item] = item
+
+    def equipped(self):
+        return self.equipment
+
+    def show_inventory(self):
+        return self.inventory
 
 
 
@@ -88,10 +101,10 @@ class Hero:
     def save_state(self):
         data = {
             "name": self.name,
-            "constitution": self.constitution,
-            "strength": self.strength,
-            "agility": self.agility,
-            "intelligence": self.intelligence,
+            "constitution": self.skills["constitution"],
+            "strength": self.skills["strength"],
+            "agility": self.skills["agility"],
+            "intelligence": self.skills["intelligence"],
             "level": self.level
         }
 
@@ -102,10 +115,10 @@ class Hero:
         with open(f"didierRPG/hero_data/{name}", "r") as file:
             data = json.load(file)
             self.name = data["name"]
-            self.constitution = data["constitution"]
-            self.strength = data["strength"]
-            self.agility = data["agility"]
-            self.intelligence = data["intelligence"]
+            self.skills["constitution"] = data["constitution"]
+            self.skills["strength"] = data["strength"]
+            self.skills["agility"] = data["agility"]
+            self.skills["intelligence"] = data["intelligence"]
             self.level = data["level"]
 
         return self
