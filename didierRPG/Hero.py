@@ -1,8 +1,11 @@
 import json
-from didierRPG.Item import Item
+import math
 
 
 class Hero:
+    def __init__(self, name):
+        self.name = name
+
     name = ""
     # skills of our hero
     # all skills are initially 0
@@ -12,6 +15,37 @@ class Hero:
         "agility": 0,
         "intelligence": 0
     }
+
+    skills_improve_mult = {
+        "constitution": 0,
+        "strength": 0,
+        "agility": 0,
+        "intelligence": 0
+    }
+
+    skills_improve_offset = {
+        "constitution": 0,
+        "strength": 0,
+        "agility": 0,
+        "intelligence": 0
+    }
+
+    skills_use_mult = {
+        "constitution": 0,
+        "strength": 0,
+        "agility": 0,
+        "intelligence": 0
+    }
+
+    skills_use_offset = {
+        "constitution": 0,
+        "strength": 0,
+        "agility": 0,
+        "intelligence": 0
+    }
+
+    # starting level
+    experience = 0
 
     # inventory stuff
     # hero has initially no gear
@@ -26,11 +60,20 @@ class Hero:
 
     inventory = []
 
-    # starting level
-    level = 1
+    # ripped from skyrim, bite me
+    def get_level(self):
+        return math.floor(-2.5 + math.sqrt(8 * self.experience + 1225) / 10)
 
-    def __init__(self, name):
-        self.name = name
+    def level_up(self, skill, skill_use_mult, skill_use_offset):
+        self.experience += skill_use_mult + skill_use_offset
+        cost = self.cost_next_level(skill)
+
+        if self.experience >= cost:
+            self.skills[skill] += 1
+
+    def cost_next_level(self, skill):
+        return self.skills_improve_mult[skill] * math.pow(self.skills[skill] - 1, 1.95) \
+               + self.skills_improve_offset[skill]
 
 
     # jobs to increase hero's level and abilities
@@ -50,6 +93,8 @@ class Hero:
     def weights(self):
         """xp increase for Strength"""
         print("Hero's lifting like a crazyman")
+        skill_improve_mult = 2
+        skill_improve_offset = 0
 
     def archery(self):
         """chance for a dinks drop and slight xp increase for Agility"""
